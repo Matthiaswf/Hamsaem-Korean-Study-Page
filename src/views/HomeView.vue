@@ -1,11 +1,16 @@
 <template>
-  <div>
-    <h1>Topik 1</h1>
-    <div v-for="t in topik1" :key="t.id">
-      <p>{{ t.id }}</p>
-      <p>{{ t.english }}</p>
-      <p>{{ t.korean }}</p>
-    </div>
+  <div class="home-container">
+    <!-- Filter Nav -->
+    <nav class="filter">
+      <button @click="setLevel('topik1')">Topik I</button>
+      <button @click="setLevel('topik2')">Topik II</button>
+    </nav>
+    <!-- Display first 5 items of levelData -->
+    <ul>
+      <li v-for="(item, index) in (levelData || []).slice(0, 5)" :key="index">
+        {{ item }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -17,14 +22,24 @@ import { onMounted } from 'vue';
 export default {
   setup() {
     const topikStore = useTopikStore();
-    const { topik1 } = storeToRefs(topikStore); // Ensures reactivity
+    const { levelData } = storeToRefs(topikStore); // Ensures reactivity
 
     onMounted(() => {
       topikStore.loadTopik1(); // Load data into state
-      console.log(topikStore.getTopik1()); // Log the state to verify it's working
     });
 
-    return { topik1 };
+    function setLevel(level) {
+      if (level === 'topik1') {
+        topikStore.loadTopik1();
+      } else if (level === 'topik2') {
+        topikStore.loadTopik2();
+      }
+
+      console.log('Level set to: ', level);
+      return;
+    }
+
+    return { levelData, setLevel };
   },
 };
 </script>
