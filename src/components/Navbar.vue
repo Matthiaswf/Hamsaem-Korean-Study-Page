@@ -16,6 +16,9 @@ export default {};
 </script>
 
 <style scoped>
+* {
+  overflow: hidden;
+}
 .navbar-container {
   padding: 16px 10px;
   margin-bottom: 60px;
@@ -45,7 +48,7 @@ a {
   font-family: Gamja Flower;
   text-decoration: none;
   color: black;
-  font-size: 7rem;
+  font-size: 6rem;
   margin-left: 20px;
 }
 
