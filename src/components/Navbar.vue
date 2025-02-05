@@ -56,4 +56,11 @@ nav img {
   height: 100px;
   width: auto;
 }
+
+/* Mobile Styling */
+@media (max-width: 768px) {
+  .navbar-container {
+    margin-bottom: 0px;
+  }
+}
 </style>

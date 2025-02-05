@@ -52,6 +52,13 @@ export default {
 </script>
 
 <style scoped>
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
 .filter {
   width: fit-content;
   height: 50px;
@@ -94,5 +101,12 @@ button.active {
   color: #495057;
   border: 2px solid #495057;
   box-shadow: 0 5px #495057;
+}
+
+/* Mobile Styling */
+@media (max-width: 768px) {
+  .home-container {
+    gap: 0px;
+  }
 }
 </style>
