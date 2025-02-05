@@ -1,6 +1,7 @@
 <template>
   <div class="quiz-container">
-    <h2>Translate: {{ quizQuestion.korean }}</h2>
+    <h2 v-if="quizQuestion">Translate: {{ quizQuestion.korean }}</h2>
+    <h2 v-else>Select a Level</h2>
     <div class="quiz-choices">
       <button v-for="item in selectedItems" :key="item.id">
         {{ item.english }}
@@ -21,16 +22,15 @@ export default {
   },
   setup(props) {
     function getRandomItems(arr, num) {
+      if (!arr || arr.length === 0) return []; // Handle empty data case
       const shuffled = [...arr].sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, num);
+      return shuffled.slice(0, Math.min(num, arr.length));
     }
 
-    // Generate 4 random choices
     const selectedItems = computed(() => getRandomItems(props.levelData, 4));
 
-    // Randomly pick one item from the 4 choices as the quiz question
     const quizQuestion = computed(() =>
-      selectedItems.value.length
+      selectedItems.value.length > 0
         ? selectedItems.value[
             Math.floor(Math.random() * selectedItems.value.length)
           ]
