@@ -2,16 +2,27 @@
   <div class="quiz-container">
     <h2 v-if="quizQuestion">Translate: {{ quizQuestion.korean }}</h2>
     <h2 v-else>Select a Level</h2>
-    <div class="quiz-choices">
-      <button v-for="item in selectedItems" :key="item.id">
+
+    <div class="quiz-choices" v-if="quizState === 1">
+      <button
+        @click="userSelect(item.id)"
+        v-for="item in selectedItems"
+        :key="item.id"
+      >
         {{ item.english }}
       </button>
+    </div>
+
+    <div v-else-if="quizState === 2">
+      <h2 v-if="userSelectedItem === quizQuestion.id">Correct!</h2>
+      <h2 v-else>Incorrect!</h2>
+      <button @click="newRound">Next Question</button>
     </div>
   </div>
 </template>
 
 <script>
-import { computed } from 'vue';
+import { ref, watch } from 'vue';
 
 export default {
   props: {
@@ -21,23 +32,55 @@ export default {
     },
   },
   setup(props) {
+    const userSelectedItem = ref(null);
+    const quizState = ref(1);
+    const selectedItems = ref([]);
+    const quizQuestion = ref(null);
+
     function getRandomItems(arr, num) {
-      if (!arr || arr.length === 0) return []; // Handle empty data case
+      if (!arr || arr.length === 0) return []; // Ensure we don't select from an empty array
       const shuffled = [...arr].sort(() => 0.5 - Math.random());
       return shuffled.slice(0, Math.min(num, arr.length));
     }
 
-    const selectedItems = computed(() => getRandomItems(props.levelData, 4));
+    function newRound() {
+      if (!props.levelData || props.levelData.length === 0) return; // Prevent running when data is empty
 
-    const quizQuestion = computed(() =>
-      selectedItems.value.length > 0
+      userSelectedItem.value = null;
+      quizState.value = 1;
+      selectedItems.value = getRandomItems(props.levelData, 4);
+      quizQuestion.value = selectedItems.value.length
         ? selectedItems.value[
             Math.floor(Math.random() * selectedItems.value.length)
           ]
-        : null
+        : null;
+    }
+
+    function userSelect(id) {
+      userSelectedItem.value = id;
+      quizState.value = 2;
+      console.log('User selected:', id);
+    }
+
+    // Watch for when levelData is populated and trigger the first question
+    watch(
+      () => props.levelData,
+      (newVal) => {
+        if (newVal.length > 0) {
+          newRound();
+        }
+      },
+      { immediate: true } // Runs immediately if levelData is already available
     );
 
-    return { selectedItems, quizQuestion };
+    return {
+      selectedItems,
+      quizQuestion,
+      userSelect,
+      userSelectedItem,
+      quizState,
+      newRound,
+    };
   },
 };
 </script>
