@@ -24,10 +24,6 @@ export default {
     const topikStore = useTopikStore();
     const { levelData } = storeToRefs(topikStore); // Ensures reactivity
 
-    onMounted(() => {
-      topikStore.loadTopik1(); // Load data into state
-    });
-
     function setLevel(level) {
       if (level === 'topik1') {
         topikStore.loadTopik1();
