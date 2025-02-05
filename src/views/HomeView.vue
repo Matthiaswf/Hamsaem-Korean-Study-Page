@@ -15,13 +15,7 @@
         Topik II
       </button>
     </nav>
-
-    <!-- Display first 5 items of levelData -->
-    <ul>
-      <li v-for="(item, index) in (levelData || []).slice(0, 5)" :key="index">
-        {{ item }}
-      </li>
-    </ul>
+    <ChoiceQuiz v-if="levelData" :levelData="levelData" />
   </div>
 </template>
 
@@ -29,8 +23,12 @@
 import { ref } from 'vue';
 import { useTopikStore } from '@/stores/TopikStore';
 import { storeToRefs } from 'pinia';
+import ChoiceQuiz from '@/components/ChoiceQuiz.vue';
 
 export default {
+  components: {
+    ChoiceQuiz,
+  },
   setup() {
     const topikStore = useTopikStore();
     const { levelData } = storeToRefs(topikStore); // Ensures reactivity
