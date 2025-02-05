@@ -17,7 +17,6 @@
 <script>
 import { useTopikStore } from '@/stores/TopikStore';
 import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
 
 export default {
   setup() {
@@ -39,3 +38,39 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.filter {
+  width: fit-content;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+button {
+  min-width: 130px;
+  height: 40px;
+  color: #fff;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  background: #cc924b;
+  box-shadow: 0 5px #d6ae7c;
+}
+button:hover {
+  box-shadow: 0 3px #495057;
+  top: 1px;
+}
+button:active {
+  box-shadow: 0 0 #495057;
+  top: 5px;
+}
+</style>
