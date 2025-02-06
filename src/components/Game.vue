@@ -11,7 +11,7 @@
         <li>Click all 20 pictures to win!</li>
       </ul>
 
-      <button @click="gameSate = 1">Start Game</button>
+      <button @click="startGame">Start Game</button>
     </div>
     <div class="round-display" v-if="gameSate === 1">
       <h4>Round: {{ round }} / 20</h4>
@@ -58,6 +58,12 @@ export default {
     // Get the images
     gameStore.getImages();
 
+    function startGame() {
+      gameStore.resetGame();
+      gameStore.shuffleImages();
+      gameSate.value = 1;
+    }
+
     function selectImage(id) {
       if (selectedImages.value.includes(id)) {
         gameLost = true;
@@ -83,6 +89,7 @@ export default {
       round,
       selectImage,
       gameSate,
+      startGame,
     };
   },
 };
