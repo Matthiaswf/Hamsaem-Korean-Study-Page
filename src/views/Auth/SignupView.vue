@@ -27,7 +27,7 @@
       <button v-if="!isPending" type="submit">Sign Up</button>
       <div v-if="error" class="error-message">{{ error }}</div>
 
-      <button type="submit" :disabled="isPending">
+      <button v-if="isPending" type="submit" :disabled="isPending">
         {{ isPending ? 'Loading...' : 'Sign Up' }}
       </button>
     </form>
