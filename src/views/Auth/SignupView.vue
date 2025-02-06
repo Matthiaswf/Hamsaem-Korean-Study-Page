@@ -24,13 +24,20 @@
         </div>
       </div>
 
-      <button type="submit">Sign Up</button>
+      <button v-if="!isPending" type="submit">Sign Up</button>
+      <div v-if="error" class="error-message">{{ error }}</div>
+
+      <button type="submit" :disabled="isPending">
+        {{ isPending ? 'Loading...' : 'Sign Up' }}
+      </button>
     </form>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import useSignup from '@/composables/useSignup';
 
 // Form Fields
 const email = ref('');
@@ -38,22 +45,43 @@ const username = ref('');
 const password = ref('');
 const selectedProfile = ref('');
 
-// Correct way to import local assets in Vue 3
 const profilePictures = ref([
-  new URL('@/assets/icons/userThumbnails/bear.svg', import.meta.url).href,
-  new URL('@/assets/icons/userThumbnails/cat.svg', import.meta.url).href,
-  new URL('@/assets/icons/userThumbnails/chicken.svg', import.meta.url).href,
-  new URL('@/assets/icons/userThumbnails/dog.svg', import.meta.url).href,
-  new URL('@/assets/icons/userThumbnails/koala.svg', import.meta.url).href,
-  new URL('@/assets/icons/userThumbnails/lion.svg', import.meta.url).href,
-  new URL('@/assets/icons/userThumbnails/meerkat.svg', import.meta.url).href,
-  new URL('@/assets/icons/userThumbnails/sea-lion.svg', import.meta.url).href,
+  '/userThumbnails/bear.svg',
+  '/userThumbnails/cat.svg',
+  '/userThumbnails/chicken.svg',
+  '/userThumbnails/dog.svg',
+  '/userThumbnails/koala.svg',
+  '/userThumbnails/lion.svg',
+  '/userThumbnails/meerkat.svg',
+  '/userThumbnails/sea-lion.svg',
 ]);
 
-const submitForm = () => {
-  alert(
-    `Signed up with: ${email.value}, ${username.value}, Profile: ${selectedProfile.value}`
-  );
+// Signup Functionality
+
+const { error, signup, isPending } = useSignup();
+
+const router = useRouter();
+
+const submitForm = async () => {
+  error.value = null; // Reset error before attempting signup
+
+  if (!selectedProfile.value) {
+    error.value = 'Please select a profile picture.';
+    return;
+  }
+
+  try {
+    await signup(
+      email.value,
+      password.value,
+      username.value,
+      selectedProfile.value
+    );
+    router.push('/'); // Redirect on successful signup
+  } catch (err) {
+    console.error('Signup error:', err);
+    error.value = err.message; // Store the error to display in UI
+  }
 };
 </script>
 
@@ -138,5 +166,16 @@ button {
 
 button:hover {
   background: gray;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+button:disabled {
+  background: gray;
+  cursor: not-allowed;
 }
 </style>
