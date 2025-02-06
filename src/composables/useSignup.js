@@ -23,7 +23,7 @@ const signup = async (email, password, displayName, selectedProfile) => {
     await addDoc({
       displayName: res.user.displayName,
       userId: res.user.uid,
-      isOnline: false,
+      isOnline: true,
       isAdmin: false,
       userThumbnail: selectedProfile, // Ensure correct profile picture is stored
       createdAt: timestamp(),
