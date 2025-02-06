@@ -19,17 +19,22 @@
       </div>
 
       <div v-else-if="quizState === 2" class="result">
-        <h2
-          :class="
-            userSelectedItem === quizQuestion.id ? 'correct' : 'incorrect'
-          "
-        >
-          {{
-            userSelectedItem === quizQuestion.id
-              ? '✅ Correct!'
-              : '❌ Incorrect!'
-          }}
-        </h2>
+        <div v-if="userSelectedItem !== quizQuestion.id" class="fail">
+          <img
+            :src="randomFailImage"
+            alt="Success Image"
+            class="success-image"
+          />
+          Incorrect!
+        </div>
+        <div v-else class="success">
+          <img
+            :src="randomSucessImage"
+            alt="Success Image"
+            class="success-image"
+          />
+          Correct!
+        </div>
         <button class="next-btn" @click="newRound">Next Question</button>
       </div>
     </div>
@@ -47,10 +52,24 @@ export default {
     },
   },
   setup(props) {
+    const successImages = [
+      require('@/assets/icons/cats/cool.svg'),
+      require('@/assets/icons/cats/hearts.svg'),
+      require('@/assets/icons/cats/party.svg'),
+      require('@/assets/icons/cats/smile.svg'),
+    ];
+    const failImages = [
+      require('@/assets/icons/cats/angry.svg'),
+      require('@/assets/icons/cats/tears.svg'),
+      require('@/assets/icons/cats/shocked.svg'),
+    ];
+
     const userSelectedItem = ref(null);
     const quizState = ref(1);
     const selectedItems = ref([]);
     const quizQuestion = ref(null);
+    const randomSucessImage = ref(null);
+    const randomFailImage = ref(null);
 
     function getRandomItems(arr, num) {
       if (!arr || arr.length === 0) return [];
@@ -61,6 +80,10 @@ export default {
     function newRound() {
       if (!props.levelData || props.levelData.length === 0) return;
 
+      randomSucessImage.value =
+        successImages[Math.floor(Math.random() * successImages.length)];
+      randomFailImage.value =
+        failImages[Math.floor(Math.random() * failImages.length)];
       userSelectedItem.value = null;
       quizState.value = 1;
       selectedItems.value = getRandomItems(props.levelData, 4);
@@ -93,6 +116,8 @@ export default {
       userSelectedItem,
       quizState,
       newRound,
+      randomSucessImage,
+      randomFailImage,
     };
   },
 };
@@ -175,14 +200,36 @@ h2 span {
   margin: 15px 0;
 }
 
-.correct {
+.success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #28a745;
-  font-size: 22px;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-.incorrect {
+.success-image {
+  width: 60px;
+  height: 60px;
+  margin: 20px;
+  object-fit: cover;
+}
+
+.fail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #dc3545;
-  font-size: 22px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.fail-image {
+  width: 60px;
+  height: 60px;
+  margin: 20px;
+  object-fit: cover;
 }
 
 /* Next Button */
