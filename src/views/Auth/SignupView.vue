@@ -32,30 +32,34 @@
 <script setup>
 import { ref } from 'vue';
 
+// Form Fields
 const email = ref('');
 const username = ref('');
 const password = ref('');
 const selectedProfile = ref('');
 
+// Correct way to import local assets in Vue 3
 const profilePictures = ref([
-  'https://via.placeholder.com/50',
-  'https://via.placeholder.com/50?text=1',
-  'https://via.placeholder.com/50?text=2',
-  'https://via.placeholder.com/50?text=3',
-  'https://via.placeholder.com/50?text=4',
-  'https://via.placeholder.com/50?text=5',
-  'https://via.placeholder.com/50?text=6',
-  'https://via.placeholder.com/50?text=7',
+  new URL('@/assets/icons/userThumbnails/bear.svg', import.meta.url).href,
+  new URL('@/assets/icons/userThumbnails/cat.svg', import.meta.url).href,
+  new URL('@/assets/icons/userThumbnails/chicken.svg', import.meta.url).href,
+  new URL('@/assets/icons/userThumbnails/dog.svg', import.meta.url).href,
+  new URL('@/assets/icons/userThumbnails/koala.svg', import.meta.url).href,
+  new URL('@/assets/icons/userThumbnails/lion.svg', import.meta.url).href,
+  new URL('@/assets/icons/userThumbnails/meerkat.svg', import.meta.url).href,
+  new URL('@/assets/icons/userThumbnails/sea-lion.svg', import.meta.url).href,
 ]);
 
 const submitForm = () => {
-  alert(`Signed up with: ${email.value}, ${username.value}`);
+  alert(
+    `Signed up with: ${email.value}, ${username.value}, Profile: ${selectedProfile.value}`
+  );
 };
 </script>
 
 <style scoped>
 .signup-container {
-  width: 300px;
+  width: 500px; /* Increased width to accommodate everything */
   margin: 50px auto;
   padding: 20px;
   background: #fff;
@@ -79,46 +83,51 @@ label {
 
 input {
   width: 100%;
-  padding: 8px;
-  margin-top: 5px;
+  padding: 10px;
+  margin-top: 10px;
   border: 1px solid black;
   outline: none;
   background: white;
   color: black;
-  box-sizing: border-box; /* Prevents the input from overflowing */
+  box-sizing: border-box;
 }
 
 .profile-options {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 15px; /* Adjusted spacing between thumbnails */
+  flex-wrap: wrap; /* Allow thumbnails to wrap if they exceed the width */
+  margin-top: 20px;
 }
 
 .profile-option {
-  width: 50px;
-  height: 50px;
-  border: 2px solid black;
-  cursor: pointer;
+  width: 100px; /* Thumbnail size */
+  height: 100px; /* Ensure a square container */
+  border: 3px solid black; /* Default border */
+  border-radius: 50%; /* Perfectly circular */
+  overflow: hidden; /* Clip anything outside the circle */
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s;
-}
-
-.profile-option img {
-  width: 100%;
-  height: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .profile-option.selected {
-  background: black;
+  border-color: #007bff; /* Highlight color for the selected thumbnail */
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Add glow effect */
+}
+
+.profile-option img {
+  width: 100%; /* Scale image to fill parent */
+  height: 100%; /* Ensure the image fits the circle */
+  object-fit: cover; /* Ensures image covers the circle properly */
 }
 
 button {
   width: 100%;
-  padding: 10px;
-  margin-top: 15px;
+  padding: 12px;
+  margin-top: 25px;
   background: black;
   color: white;
   font-weight: bold;
