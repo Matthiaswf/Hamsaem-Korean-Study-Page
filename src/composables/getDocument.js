@@ -1,5 +1,5 @@
-import { ref, watchEffect } from "vue";
-import { projectFirestore } from "../firebase/config";
+import { ref, watchEffect } from 'vue';
+import { projectFirestore } from '../firebase/config';
 
 const getDocument = (collection, id) => {
   const document = ref(null);
@@ -15,13 +15,13 @@ const getDocument = (collection, id) => {
         document.value = { ...doc.data(), id: doc.id };
         error.value = null;
       } else {
-        error.value = "that document does not exist";
+        error.value = 'that document does not exist';
         document.value = null;
       }
     },
     (err) => {
       console.log(err.message);
-      error.value = "could not fetch the document";
+      error.value = 'could not fetch the document';
     }
   );
 

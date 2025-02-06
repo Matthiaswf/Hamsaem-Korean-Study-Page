@@ -7,12 +7,23 @@
       <h1 class="logo-text">
         <router-link to="/">함샘</router-link>
       </h1>
+      <h2 v-if="user">{{ user.displayName }}</h2>
+      <button v-if="user" @click="logout">Logout</button>
     </nav>
   </div>
 </template>
 
 <script>
-export default {};
+import getUser from '@/composables/getUser';
+import useLogout from '@/composables/useLogout';
+export default {
+  setup() {
+    const { user } = getUser();
+    const { logout } = useLogout();
+
+    return { user, logout };
+  },
+};
 </script>
 
 <style scoped>
