@@ -14,8 +14,12 @@
       >
         Topik II
       </button>
+      <button @click="setGame(true)" :class="{ active: isPlaying === true }">
+        Hamgopalooza
+      </button>
     </nav>
-    <ChoiceQuiz v-if="levelData" :levelData="levelData" />
+    <ChoiceQuiz v-if="levelData && !isPlaying" :levelData="levelData" />
+    <Game v-else-if="isPlaying" />
   </div>
 </template>
 
@@ -24,29 +28,37 @@ import { ref } from 'vue';
 import { useTopikStore } from '@/stores/TopikStore';
 import { storeToRefs } from 'pinia';
 import ChoiceQuiz from '@/components/ChoiceQuiz.vue';
+import Game from '@/components/Game.vue';
 
 export default {
   components: {
     ChoiceQuiz,
+    Game,
   },
   setup() {
     const topikStore = useTopikStore();
     const { levelData } = storeToRefs(topikStore); // Ensures reactivity
     const selectedLevel = ref(null); // Track active level
+    const isPlaying = ref(false); // Track game state
 
     function setLevel(level) {
       selectedLevel.value = level; // Set active level
 
       if (level === 'topik1') {
         topikStore.loadTopik1();
+        isPlaying.value = false;
       } else if (level === 'topik2') {
         topikStore.loadTopik2();
+        isPlaying.value = false;
       }
-
-      console.log('Level set to: ', level);
     }
 
-    return { levelData, setLevel, selectedLevel };
+    function setGame(value) {
+      selectedLevel.value = null; // Reset active level
+      isPlaying.value = value; // Set game state
+    }
+
+    return { levelData, setLevel, selectedLevel, isPlaying, setGame };
   },
 };
 </script>

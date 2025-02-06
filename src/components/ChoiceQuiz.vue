@@ -73,7 +73,6 @@ export default {
       imageArray.forEach((src) => {
         const img = new Image();
         img.src = src;
-        console.log('Preloading image:', src);
       });
     }
 
