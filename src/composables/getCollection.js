@@ -1,5 +1,5 @@
-import { ref, watchEffect } from "vue";
-import { projectFirestore } from "../firebase/config";
+import { ref, watchEffect } from 'vue';
+import { projectFirestore } from '../firebase/config';
 
 const getCollection = (collection, query) => {
   const documents = ref(null);
@@ -8,7 +8,7 @@ const getCollection = (collection, query) => {
   // register the firestore collection reference
   let collectionRef = projectFirestore
     .collection(collection)
-    .orderBy("createdAt");
+    .orderBy('createdAt');
 
   if (query) {
     collectionRef = collectionRef.where(...query);
@@ -29,7 +29,7 @@ const getCollection = (collection, query) => {
     (err) => {
       console.log(err.message);
       documents.value = null;
-      error.value = "could not fetch the data";
+      error.value = 'could not fetch the data';
     }
   );
 
