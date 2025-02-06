@@ -1,34 +1,60 @@
 <template>
   <div class="game-container">
     <div v-if="loading" class="loading">Loading...</div>
-    <div class="game" v-else>
-      <div class="game-img" v-for="(image, index) in images" :key="index">
-        <img :src="image" :alt="'Game Image ' + index" />
+    <div class="round-display" v-else>
+      <h4>Round: {{ round }} / 20</h4>
+    </div>
+    <div class="game">
+      <div
+        class="game-img"
+        v-for="image in images"
+        :key="image.id"
+        @click="selectImage(image.id)"
+      >
+        <img :src="image.src" :alt="'Game Image ' + image.id" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { watch } from 'vue';
 import { useGameStore } from '@/stores/GameStore';
 import { storeToRefs } from 'pinia';
 
 export default {
   setup() {
+    let gameLost = false;
+
     const gameStore = useGameStore();
 
     // Turns them into Refs so we can use images
-    const { images, loading } = storeToRefs(gameStore);
+    const { images, selectedImages, round, loading } = storeToRefs(gameStore);
 
     // Get the images
     gameStore.getImages();
 
-    console.log(images);
+    function selectImage(id) {
+      if (selectedImages.value.includes(id)) {
+        gameLost = true;
+        gameStore.resetGame();
+        gameStore.shuffleImages();
+        console.log('Game Over');
+        return;
+      } else {
+        gameStore.selectImage(id);
+        gameStore.incrementRound();
+        if (round.value === 20) {
+          console.log('Win');
+        }
+        gameStore.shuffleImages();
+      }
+    }
 
     return {
       images,
       loading,
+      round,
+      selectImage,
     };
   },
 };
@@ -60,6 +86,10 @@ export default {
   flex-wrap: wrap;
   gap: 1em;
   max-width: 1200px;
+}
+
+h4 {
+  margin-bottom: 1em;
 }
 
 .game-img {
