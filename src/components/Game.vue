@@ -1,8 +1,8 @@
 <template>
   <div class="game-container">
     <div v-if="loading" class="loading">Loading...</div>
-    <div v-else>
-      <div class="game" v-for="(image, index) in images" :key="index">
+    <div class="game" v-else>
+      <div class="game-img" v-for="(image, index) in images" :key="index">
         <img :src="image" :alt="'Game Image ' + index" />
       </div>
     </div>
@@ -35,6 +35,13 @@ export default {
 </script>
 
 <style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
 .game-container {
   display: flex;
   flex-direction: column;
@@ -42,8 +49,27 @@ export default {
   justify-content: flex-start;
   font-family: 'Arial', sans-serif;
   background-color: white;
-  padding: 30px;
   min-height: 100vh;
   width: 100vw;
+}
+
+.game {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1em;
+  max-width: 1200px;
+}
+
+.game-img {
+  width: 200px;
+  height: 200px;
+  border: 8px solid #ddc5b0;
+  border-radius: 20px;
+}
+
+.game-img img {
+  border-radius: 12px;
 }
 </style>
