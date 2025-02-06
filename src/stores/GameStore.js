@@ -46,8 +46,6 @@ export const useGameStore = defineStore('gameStore', {
     },
 
     shuffleImages() {
-      console.log('Before Shuffle:', [...this.images]); // Debugging
-
       // Shuffle using Fisher-Yates algorithm
       const shuffled = [...this.images];
       for (let i = shuffled.length - 1; i > 0; i--) {
@@ -56,8 +54,6 @@ export const useGameStore = defineStore('gameStore', {
       }
 
       this.images = shuffled; // Vue will detect this change
-
-      console.log('After Shuffle:', [...this.images]); // Debugging
     },
     resetGame() {
       this.selectedImages = [];
