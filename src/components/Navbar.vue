@@ -1,12 +1,15 @@
 <template>
   <div class="navbar-container">
     <nav>
-      <router-link to="/" class="home-logo"
-        ><img src="@/assets/icons/navbar/logo.png" alt=""
-      /></router-link>
-      <h1 class="logo-text">
-        <router-link to="/">함샘</router-link>
-      </h1>
+      <div class="logo">
+        <router-link to="/" class="home-logo"
+          ><img src="@/assets/icons/navbar/logo.png" alt=""
+        /></router-link>
+        <h1 class="logo-text">
+          <router-link to="/">함샘</router-link>
+        </h1>
+      </div>
+
       <div v-if="user" class="user">
         <img :src="user.photoURL" alt="" />
         <h2 v-if="user">{{ user.displayName }}</h2>
@@ -49,6 +52,12 @@ nav {
   max-width: 1200px;
   margin: 0 auto;
   color: var(--text);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .home-logo {
