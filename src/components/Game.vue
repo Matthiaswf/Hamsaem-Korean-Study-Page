@@ -2,7 +2,7 @@
   <div class="game-container">
     <div v-if="loading" class="loading">Loading...</div>
     <div class="game-rules" v-if="gameSate === 0">
-      <h2>Need to cool off?</h2>
+      <h2>Need to cool off ?</h2>
       <h4>Here are the rules:</h4>
 
       <ul class="rules-list">
