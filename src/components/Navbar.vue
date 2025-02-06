@@ -11,9 +11,14 @@
       </div>
 
       <div v-if="user" class="user">
-        <img :src="user.photoURL" alt="" />
-        <h2 v-if="user">{{ user.displayName }}</h2>
-        <button v-if="user" @click="logout">Logout</button>
+        <img class="user-thumbnail" :src="user.photoURL" alt="" />
+        <h2 class="user-displayName" v-if="user">{{ user.displayName }}</h2>
+        <img
+          class="logout-button"
+          @click="logout"
+          src="@/assets/icons/navbar/logout.svg"
+          alt=""
+        />
       </div>
     </nav>
   </div>
@@ -73,6 +78,26 @@ nav {
   align-items: center;
   justify-content: flex-end;
   margin-left: auto;
+}
+
+.user-thumbnail {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-displayName {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.logout-button {
+  height: 30px;
+  width: 30px;
+  padding-top: 5px;
+  cursor: pointer;
 }
 
 a {
