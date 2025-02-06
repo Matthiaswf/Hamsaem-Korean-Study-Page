@@ -21,7 +21,7 @@ export default {};
 }
 .navbar-container {
   padding: 16px 10px;
-  margin-bottom: 60px;
+  margin-bottom: 0px;
   height: 100px;
   width: 100vw;
 }

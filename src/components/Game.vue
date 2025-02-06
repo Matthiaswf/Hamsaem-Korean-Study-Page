@@ -26,8 +26,14 @@
         <img :src="image.src" :alt="'Game Image ' + image.id" />
       </div>
     </div>
-    <div class="game-over" v-if="gameSate === 2">
+    <div class="game-result" v-if="gameSate === 2">
       <h2>Game Over!</h2>
+      <img class="result-img" src="@/assets/icons/cats/tears.svg" alt="" />
+      <button @click="gameSate = 1">Play Again</button>
+    </div>
+    <div class="game-result" v-if="gameSate === 3">
+      <h2>You Win!</h2>
+      <img class="result-img" src="@/assets/icons/cats/party.svg" alt="" />
       <button @click="gameSate = 1">Play Again</button>
     </div>
   </div>
@@ -65,6 +71,7 @@ export default {
         gameStore.incrementRound();
         if (round.value === 20) {
           console.log('Win');
+          gameSate.value = 3;
         }
         gameStore.shuffleImages();
       }
@@ -95,8 +102,10 @@ export default {
   align-items: center;
   justify-content: flex-start; /* Centers content vertically */
   background-color: white;
-  min-height: 100vh; /* Ensure it takes the full viewport height */
+  min-height: 100vh;
   width: 100vw;
+  padding-bottom: 10px;
+  overflow: hidden;
 }
 
 .game-rules {
@@ -113,7 +122,7 @@ export default {
   font-size: 24px;
 }
 
-.game-over {
+.game-result {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,5 +178,11 @@ h4 {
 
 .game-img img {
   border-radius: 12px;
+}
+
+.result-img {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 2rem;
 }
 </style>
