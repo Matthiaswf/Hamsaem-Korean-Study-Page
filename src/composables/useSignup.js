@@ -18,7 +18,8 @@ const signup = async (email, password, displayName, selectedProfile) => {
     );
     if (!res) throw new Error('Could not complete signup');
 
-    await res.user.updateProfile({ displayName });
+    // Update user profile with displayName and photoURL
+    await res.user.updateProfile({ displayName, photoURL: selectedProfile });
 
     await addDoc({
       displayName: res.user.displayName,

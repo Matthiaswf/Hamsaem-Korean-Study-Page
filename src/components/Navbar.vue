@@ -7,8 +7,11 @@
       <h1 class="logo-text">
         <router-link to="/">함샘</router-link>
       </h1>
-      <h2 v-if="user">{{ user.displayName }}</h2>
-      <button v-if="user" @click="logout">Logout</button>
+      <div v-if="user" class="user">
+        <img :src="user.photoURL" alt="" />
+        <h2 v-if="user">{{ user.displayName }}</h2>
+        <button v-if="user" @click="logout">Logout</button>
+      </div>
     </nav>
   </div>
 </template>
@@ -16,12 +19,13 @@
 <script>
 import getUser from '@/composables/getUser';
 import useLogout from '@/composables/useLogout';
+
 export default {
   setup() {
     const { user } = getUser();
     const { logout } = useLogout();
 
-    return { user, logout };
+    return { user, logout, document };
   },
 };
 </script>
@@ -53,6 +57,13 @@ nav {
   justify-content: center;
   height: 100%;
   width: auto;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
 }
 
 a {
