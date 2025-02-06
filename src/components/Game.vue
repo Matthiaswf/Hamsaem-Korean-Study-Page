@@ -2,15 +2,15 @@
   <div class="game-container">
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else>
-      <div class="game" v-for="image in images" :key="image.id">
-        <img :src="image.url" alt="game" />
+      <div class="game" v-for="(image, index) in images" :key="index">
+        <img :src="image" :alt="'Game Image ' + index" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { watch } from 'vue';
 import { useGameStore } from '@/stores/GameStore';
 import { storeToRefs } from 'pinia';
 

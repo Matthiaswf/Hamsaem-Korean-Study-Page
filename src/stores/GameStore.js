@@ -14,8 +14,9 @@ export const useGameStore = defineStore('gameStore', {
       const context = require.context(
         '@/assets/hamgopalooza',
         false,
-        /\.(png|jpe?g|svg)$/
+        /\.(png|jpe?g|svg|webp)$/ // Added webp here
       );
+      console.log('Context Keys:', context.keys()); // Check the keys
       const data = context.keys().map(context);
 
       this.images = data;
