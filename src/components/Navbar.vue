@@ -10,6 +10,24 @@
         </h1>
       </div>
 
+      <div v-if="!user" class="auth-links">
+        <div @click="redirectLogin" class="auth-wrap">
+          <img
+            class="auth-img"
+            src="@/assets/icons/navbar/login.svg"
+            alt=""
+          />Login
+        </div>
+        <div class="divider"></div>
+        <div @click="redirectSignup" class="auth-wrap">
+          <img
+            class="auth-img"
+            src="@/assets/icons/navbar/signup.svg"
+            alt=""
+          />Sign Up
+        </div>
+      </div>
+
       <div v-if="user" class="user">
         <img class="user-thumbnail" :src="user.photoURL" alt="" />
         <h2 class="user-displayName" v-if="user">{{ user.displayName }}</h2>
@@ -27,13 +45,23 @@
 <script>
 import getUser from '@/composables/getUser';
 import useLogout from '@/composables/useLogout';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
     const { user } = getUser();
     const { logout } = useLogout();
+    const router = useRouter();
 
-    return { user, logout, document };
+    const redirectLogin = () => {
+      router.push('/login');
+    };
+
+    const redirectSignup = () => {
+      router.push('/signup');
+    };
+
+    return { user, logout, redirectLogin, redirectSignup };
   },
 };
 </script>
@@ -98,6 +126,37 @@ nav {
   width: 30px;
   padding-top: 5px;
   cursor: pointer;
+}
+
+.auth-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.auth-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.auth-img {
+  height: 30px;
+  width: 30px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+/* Vertical divider */
+.divider {
+  width: 2px;
+  height: 30px;
+  background-color: black;
+  margin: 0 12px;
 }
 
 a {
