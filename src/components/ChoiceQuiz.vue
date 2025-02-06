@@ -41,7 +41,15 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import coolCat from '@/assets/icons/cats/cool.svg';
+import heartsCat from '@/assets/icons/cats/hearts.svg';
+import partyCat from '@/assets/icons/cats/party.svg';
+import smileCat from '@/assets/icons/cats/smile.svg';
+
+import angryCat from '@/assets/icons/cats/angry.svg';
+import tearsCat from '@/assets/icons/cats/tears.svg';
+import shockedCat from '@/assets/icons/cats/shocked.svg';
 
 export default {
   props: {
@@ -51,17 +59,8 @@ export default {
     },
   },
   setup(props) {
-    const successImages = [
-      require('@/assets/icons/cats/cool.svg'),
-      require('@/assets/icons/cats/hearts.svg'),
-      require('@/assets/icons/cats/party.svg'),
-      require('@/assets/icons/cats/smile.svg'),
-    ];
-    const failImages = [
-      require('@/assets/icons/cats/angry.svg'),
-      require('@/assets/icons/cats/tears.svg'),
-      require('@/assets/icons/cats/shocked.svg'),
-    ];
+    const successImages = [coolCat, heartsCat, partyCat, smileCat];
+    const failImages = [angryCat, tearsCat, shockedCat];
 
     const userSelectedItem = ref(null);
     const quizState = ref(1);
@@ -69,6 +68,14 @@ export default {
     const quizQuestion = ref(null);
     const randomSucessImage = ref(null);
     const randomFailImage = ref(null);
+
+    function preloadImages(imageArray) {
+      imageArray.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+        console.log('Preloading image:', src);
+      });
+    }
 
     function getRandomItems(arr, num) {
       if (!arr || arr.length === 0) return [];
@@ -107,6 +114,11 @@ export default {
       },
       { immediate: true }
     );
+
+    onMounted(() => {
+      preloadImages(successImages);
+      preloadImages(failImages);
+    });
 
     return {
       selectedItems,
