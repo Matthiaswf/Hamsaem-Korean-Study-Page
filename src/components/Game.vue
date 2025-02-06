@@ -1,10 +1,22 @@
 <template>
   <div class="game-container">
     <div v-if="loading" class="loading">Loading...</div>
-    <div class="round-display" v-else>
+    <div class="game-rules" v-if="gameSate === 0">
+      <h2>Need to cool off?</h2>
+      <h4>Here are the rules:</h4>
+
+      <ul class="rules-list">
+        <li>There are 20 unique pictures</li>
+        <li>Click each picture only once!</li>
+        <li>Click all 20 pictures to win!</li>
+      </ul>
+
+      <button @click="gameSate = 1">Start Game</button>
+    </div>
+    <div class="round-display" v-if="gameSate === 1">
       <h4>Round: {{ round }} / 20</h4>
     </div>
-    <div class="game">
+    <div class="game" v-if="gameSate === 1">
       <div
         class="game-img"
         v-for="image in images"
@@ -18,11 +30,14 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import { useGameStore } from '@/stores/GameStore';
 import { storeToRefs } from 'pinia';
 
 export default {
   setup() {
+    const gameSate = ref(0);
+
     let gameLost = false;
 
     const gameStore = useGameStore();
@@ -55,6 +70,7 @@ export default {
       loading,
       round,
       selectImage,
+      gameSate,
     };
   },
 };
@@ -72,11 +88,50 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  font-family: 'Arial', sans-serif;
+  justify-content: flex-start; /* Centers content vertically */
   background-color: white;
-  min-height: 100vh;
+  min-height: 100vh; /* Ensure it takes the full viewport height */
   width: 100vw;
+}
+
+.game-rules {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 450px;
+}
+
+.rules-list {
+  list-style-type: disc;
+  list-style-position: inside;
+  margin-bottom: 1rem;
+  font-size: 24px;
+}
+
+li {
+  margin-bottom: 1rem;
+}
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+button {
+  padding: 1rem 2rem;
+  font-size: 24px;
+  background-color: #cc924b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  transform: scale(1.05);
 }
 
 .game {
@@ -97,6 +152,7 @@ h4 {
   height: 200px;
   border: 8px solid #ddc5b0;
   border-radius: 20px;
+  cursor: pointer;
 }
 
 .game-img img {
