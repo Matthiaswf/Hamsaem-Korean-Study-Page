@@ -26,6 +26,10 @@
         <img :src="image.src" :alt="'Game Image ' + image.id" />
       </div>
     </div>
+    <div class="game-over" v-if="gameSate === 2">
+      <h2>Game Over!</h2>
+      <button @click="gameSate = 1">Play Again</button>
+    </div>
   </div>
 </template>
 
@@ -54,6 +58,7 @@ export default {
         gameStore.resetGame();
         gameStore.shuffleImages();
         console.log('Game Over');
+        gameSate.value = 2;
         return;
       } else {
         gameStore.selectImage(id);
@@ -106,6 +111,13 @@ export default {
   list-style-position: inside;
   margin-bottom: 1rem;
   font-size: 24px;
+}
+
+.game-over {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 450px;
 }
 
 li {
