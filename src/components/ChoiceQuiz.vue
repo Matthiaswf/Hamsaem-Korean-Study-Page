@@ -20,12 +20,11 @@
 
       <div v-else-if="quizState === 2" class="result">
         <div v-if="userSelectedItem !== quizQuestion.id" class="fail">
-          <img
-            :src="randomFailImage"
-            alt="Success Image"
-            class="success-image"
-          />
-          Incorrect!
+          <img :src="randomFailImage" alt="Fail Image" class="fail-image" />
+          <p>
+            Incorrect!<br />
+            {{ quizQuestion.english }}
+          </p>
         </div>
         <div v-else class="success">
           <img
@@ -33,7 +32,7 @@
             alt="Success Image"
             class="success-image"
           />
-          Correct!
+          <p>Correct!</p>
         </div>
         <button class="next-btn" @click="newRound">Next Question</button>
       </div>
@@ -200,40 +199,39 @@ h2 span {
   margin: 15px 0;
 }
 
-.success {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #28a745;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.success-image {
-  width: 60px;
-  height: 60px;
-  margin: 20px;
-  object-fit: cover;
-}
-
+.success,
 .fail {
   display: flex;
+  flex-direction: column; /* Ensure image and text stack vertically */
   align-items: center;
   justify-content: center;
-  color: #dc3545;
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 18px;
+  text-align: center; /* Center-align the text */
+  gap: 15px; /* Add space between the image and text */
 }
 
+.success-image,
 .fail-image {
-  width: 60px;
-  height: 60px;
-  margin: 20px;
-  object-fit: cover;
+  width: 100px; /* Increase the size of the image */
+  height: 100px;
+  margin: 10px 0;
+  object-fit: contain; /* Prevent image clipping */
 }
 
-/* Next Button */
+.fail p {
+  margin: 0;
+  color: #dc3545; /* Red color for incorrect text */
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.success {
+  color: #28a745; /* Green color for correct text */
+}
+
 .next-btn {
+  margin-top: 20px;
   background: #0077cc;
   color: white;
   padding: 12px 20px;
