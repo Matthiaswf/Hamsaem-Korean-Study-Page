@@ -14,7 +14,11 @@
       >
         Topik II
       </button>
-      <button @click="setGame(true)" :class="{ active: isPlaying === true }">
+      <button
+        class="not-mobile"
+        @click="setGame(true)"
+        :class="{ active: isPlaying === true }"
+      >
         Hamgopalooza
       </button>
     </nav>
@@ -121,6 +125,10 @@ button.active {
 @media (max-width: 768px) {
   .home-container {
     gap: 0px;
+  }
+
+  .not-mobile {
+    display: none;
   }
 }
 </style>
