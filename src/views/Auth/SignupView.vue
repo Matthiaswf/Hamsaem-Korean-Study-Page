@@ -38,7 +38,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import useSignup from '@/composables/useSignup';
-import leoProfanity from 'leo-profanity'; // ✅ New profanity filter
+import leoProfanity from 'leo-profanity';
 
 export default {
   setup() {
@@ -65,7 +65,7 @@ export default {
 
     // **Load Profanity List**
     onMounted(() => {
-      leoProfanity.loadDictionary(); // ✅ Load default profanity dictionary
+      leoProfanity.loadDictionary();
     });
 
     // **Email Validation**
