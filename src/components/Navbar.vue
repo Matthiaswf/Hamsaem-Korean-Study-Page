@@ -183,6 +183,10 @@ nav img {
     padding-top: 0px;
   }
 
+  nav {
+    justify-content: space-between;
+  }
+
   .logo img {
     height: 50px;
     width: auto;
@@ -215,7 +219,7 @@ nav img {
   }
 
   .auth-links {
-    margin-left: 30px;
+    margin-right: 20px;
   }
 
   .auth-img {

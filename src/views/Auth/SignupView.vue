@@ -235,4 +235,60 @@ button:disabled {
   background: gray;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .signup-container {
+    width: 90%; /* Adjusted width for smaller screens */
+    margin-top: 0px;
+    padding-top: 0px;
+    border: none;
+  }
+
+  .profile-option {
+    width: 80px; /* Adjusted thumbnail size */
+    height: 80px; /* Adjusted thumbnail size */
+  }
+
+  button {
+    margin-top: 20px; /* Adjusted margin */
+  }
+
+  .error-message {
+    margin-top: 5px; /* Adjusted margin */
+  }
+
+  input {
+    margin-top: 5px; /* Adjusted margin */
+  }
+
+  label {
+    margin-top: 5px; /* Adjusted margin */
+  }
+
+  .title {
+    font-size: 20px; /* Adjusted font size */
+  }
+
+  .profile-options {
+    margin-top: 15px; /* Adjusted margin */
+  }
+
+  .profile-option img {
+    width: 100%; /* Adjusted image size */
+    height: 100%; /* Adjusted image size */
+  }
+
+  .profile-option {
+    width: 70px; /* Adjusted thumbnail size */
+    height: 70px; /* Adjusted thumbnail size */
+  }
+
+  .profile-option.selected {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Adjusted glow effect */
+  }
+
+  .profile-options {
+    gap: 10px; /* Adjusted spacing between thumbnails */
+  }
+}
 </style>
