@@ -242,6 +242,11 @@ h2 span {
 }
 
 @media (max-width: 768px) {
+  .quiz-container {
+    min-height: 0px;
+    height: fit-content;
+  }
+
   .quiz-card {
     padding: 15px;
   }

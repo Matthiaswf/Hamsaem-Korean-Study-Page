@@ -240,6 +240,7 @@ button:disabled {
   .signup-container {
     width: 90%; /* Adjusted width for smaller screens */
     margin-top: 0px;
+    margin-bottom: 0px;
     padding-top: 0px;
     border: none;
   }
