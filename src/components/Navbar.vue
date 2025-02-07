@@ -204,18 +204,24 @@ nav img {
     margin-left: 10px;
   }
 
+  .user {
+    margin-left: 0px;
+    margin-right: 20px;
+  }
+
   .user-thumbnail {
-    height: 30px;
-    width: 30px;
+    height: 50px;
+    width: 50px;
   }
 
   .user-displayName {
-    font-size: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
   }
 
   .logout-button {
-    height: 20px;
-    width: 20px;
+    height: 30px;
+    width: 30px;
   }
 
   .auth-links {
