@@ -5,7 +5,7 @@
       <h2 v-if="quizQuestion">
         Translate: <span>{{ quizQuestion.korean }}</span>
       </h2>
-      <h2 v-else>Select a Level</h2>
+      <h2 class="placeholder" v-else>Select a Level</h2>
 
       <div class="quiz-choices" v-if="quizState === 1">
         <button
@@ -158,6 +158,10 @@ export default {
   text-align: center;
   border: 2px solid #333;
   position: relative;
+}
+
+.placeholder {
+  padding-top: 25px;
 }
 
 /* Question Styling */
