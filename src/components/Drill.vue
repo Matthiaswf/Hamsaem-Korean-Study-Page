@@ -1,5 +1,7 @@
 <template>
   <div class="drill-container">
+    <h1>Vocabulary Drill</h1>
+
     <nav class="topik-selector-container">
       <button
         @click="setLevel('topik1')"
@@ -23,11 +25,10 @@
 
     <p class="timer">Time left: {{ countdown }}s</p>
 
-    <div class="drill">
-      <p v-if="currentItem">
-        <strong>English:</strong> {{ currentItem.english }} <br />
-        <strong>Korean:</strong> {{ currentItem.korean }}
-      </p>
+    <div class="drill-card" v-if="currentItem">
+      <h2>
+        <span>{{ currentItem.korean }} - {{ currentItem.english }}</span>
+      </h2>
     </div>
   </div>
 </template>
@@ -112,22 +113,50 @@ export default {
 
 <style scoped>
 .drill-container {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Arial', sans-serif;
+  background-color: #fff;
+  padding: 30px;
+  min-height: 100vh;
+  width: 100vw;
+  color: #000;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 20px;
 }
 
 .topik-selector-container {
   margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
 }
 
 .controls {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 button {
   margin: 5px;
-  padding: 10px;
+  padding: 12px 18px;
   font-size: 16px;
+  font-weight: bold;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 5px;
   cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #000;
+  color: #fff;
 }
 
 .active {
@@ -142,8 +171,27 @@ button {
   margin: 10px 0;
 }
 
-.drill {
-  font-size: 20px;
+.drill-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  border: 2px solid #000;
   margin-top: 20px;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+h2 span {
+  font-weight: bold;
 }
 </style>
