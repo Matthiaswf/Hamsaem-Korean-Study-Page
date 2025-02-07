@@ -161,13 +161,21 @@ h1 {
 }
 
 h2 {
-  font-size: 28px;
-  height: 50px;
+  font-size: 32px;
   font-weight: 500;
+  margin: 0; /* Remove any unnecessary margins */
+  text-align: center; /* Center-align the text */
+  line-height: 1.5; /* Add better vertical spacing for text */
+  min-height: 60px; /* Ensure enough vertical space */
 }
 
 h2 span {
-  font-weight: bold;
+  display: inline-block; /* Prevent unnecessary block-level height */
+  vertical-align: middle; /* Align text vertically */
+  font-weight: bold; /* Ensure it’s emphasized */
+  text-align: center;
+  min-height: 60px;
+  min-width: 300px;
 }
 
 .placeholder {
@@ -175,7 +183,6 @@ h2 span {
 }
 
 .quiz-choices {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -232,5 +239,11 @@ h2 span {
 
 .next-btn:hover {
   background: #333;
+}
+
+@media (max-width: 768px) {
+  .quiz-card {
+    padding: 15px;
+  }
 }
 </style>

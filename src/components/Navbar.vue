@@ -174,8 +174,64 @@ nav img {
 
 /* Mobile Styling */
 @media (max-width: 768px) {
+  .no-mobile {
+    display: none;
+  }
+
   .navbar-container {
     margin-bottom: 0px;
+    padding-top: 0px;
+  }
+
+  .logo img {
+    height: 50px;
+    width: auto;
+  }
+
+  .logo-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 5px;
+  }
+
+  a {
+    font-size: 3.3rem;
+    margin-left: 10px;
+  }
+
+  .user-thumbnail {
+    height: 30px;
+    width: 30px;
+  }
+
+  .user-displayName {
+    font-size: 1rem;
+  }
+
+  .logout-button {
+    height: 20px;
+    width: 20px;
+  }
+
+  .auth-links {
+    margin-left: 30px;
+  }
+
+  .auth-img {
+    height: 20px;
+    width: 20px;
+  }
+
+  .divider {
+    height: 20px;
+    margin: 0px;
+  }
+
+  .auth-wrap {
+    margin-left: 5px;
+    margin-right: 5px;
+    font-weight: bold;
   }
 }
 </style>
