@@ -14,6 +14,7 @@
       >
         Topik II
       </button>
+      <button class="not-mobile" @click="setDrill(true)">Drill</button>
       <button
         class="not-mobile"
         @click="setGame(true)"
@@ -22,7 +23,11 @@
         Hamgopalooza
       </button>
     </nav>
-    <ChoiceQuiz v-if="levelData && !isPlaying" :levelData="levelData" />
+    <ChoiceQuiz
+      v-if="levelData && !isPlaying && !isDrilling"
+      :levelData="levelData"
+    />
+    <Drill v-else-if="isDrilling" />
     <Game v-else-if="isPlaying" />
   </div>
 </template>
@@ -32,37 +37,56 @@ import { ref } from 'vue';
 import { useTopikStore } from '@/stores/TopikStore';
 import { storeToRefs } from 'pinia';
 import ChoiceQuiz from '@/components/ChoiceQuiz.vue';
+import Drill from '@/components/Drill.vue';
 import Game from '@/components/Game.vue';
 
 export default {
   components: {
     ChoiceQuiz,
+    Drill,
     Game,
   },
   setup() {
     const topikStore = useTopikStore();
-    const { levelData } = storeToRefs(topikStore); // Ensures reactivity
-    const selectedLevel = ref(null); // Track active level
-    const isPlaying = ref(false); // Track game state
+    const { levelData } = storeToRefs(topikStore);
+    const selectedLevel = ref(null);
+    const isPlaying = ref(false);
+    const isDrilling = ref(false);
 
     function setLevel(level) {
-      selectedLevel.value = level; // Set active level
-
+      selectedLevel.value = level;
       if (level === 'topik1') {
         topikStore.loadTopik1();
+        isDrilling.value = false;
         isPlaying.value = false;
       } else if (level === 'topik2') {
         topikStore.loadTopik2();
+        isDrilling.value = false;
         isPlaying.value = false;
       }
     }
 
-    function setGame(value) {
-      selectedLevel.value = null; // Reset active level
-      isPlaying.value = value; // Set game state
+    function setDrill() {
+      selectedLevel.value = null;
+      isPlaying.value = false;
+      isDrilling.value = true;
     }
 
-    return { levelData, setLevel, selectedLevel, isPlaying, setGame };
+    function setGame(value) {
+      selectedLevel.value = null;
+      isDrilling.value = false;
+      isPlaying.value = value;
+    }
+
+    return {
+      levelData,
+      setLevel,
+      selectedLevel,
+      isPlaying,
+      isDrilling,
+      setGame,
+      setDrill,
+    };
   },
 };
 </script>
