@@ -32,8 +32,13 @@
       >
         {{ drillInterval === 2 ? '1s' : '2s' }}
       </button>
-      <p class="timer">Time left: {{ countdown }}s</p>
+      <p class="remaining-vocab">
+        Remaining: {{ remainingVocabCount }} <span class="divider"></span> Total
+        Time Left: {{ formattedTotalTimeLeft }}
+      </p>
     </div>
+
+    <div class="time-left-display">{{ formattedCountdown }}</div>
 
     <div class="drill-card" v-if="currentItem">
       <h2>
@@ -89,10 +94,33 @@ export default {
       countdown.value = drillInterval.value; // Reset countdown
       countdownId = setInterval(() => {
         if (countdown.value > 0) {
-          countdown.value--;
+          countdown.value -= 0.01; // Update every 10ms
+          countdown.value = parseFloat(countdown.value.toFixed(2));
         }
-      }, 1000);
+      }, 10);
     }
+
+    // Remaining vocabulary count
+    const remainingVocabCount = computed(
+      () => levelData.value.length - currentIndex.value
+    );
+
+    // Formatted countdown timer (e.g., 2.00 format)
+    const formattedCountdown = computed(() => countdown.value.toFixed(1));
+
+    // Total remaining time for all vocabulary
+    const totalRemainingTime = computed(
+      () => remainingVocabCount.value * drillInterval.value
+    );
+
+    const formattedTotalTimeLeft = computed(() => {
+      const totalSeconds = totalRemainingTime.value;
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = Math.floor(totalSeconds % 60);
+
+      return `${hours}h ${minutes}min ${seconds}s`;
+    });
 
     function pauseDrill() {
       clearInterval(intervalId);
@@ -124,6 +152,10 @@ export default {
       isPlaying,
       countdown,
       drillInterval,
+      remainingVocabCount,
+      totalRemainingTime,
+      formattedCountdown,
+      formattedTotalTimeLeft,
     };
   },
 };
@@ -163,24 +195,23 @@ h1 {
 .topik-selector-container,
 .controls,
 .timer-container {
-  width: 80%; /* Ensures alignment with the heading */
+  width: 80%;
   max-width: 500px;
   display: flex;
-  gap: 15px; /* Restore button spacing */
-  justify-content: flex-start; /* Align buttons to the start of the container */
+  gap: 15px;
+  justify-content: flex-start;
 }
 
 .topik-selector-container button,
 .controls button {
   margin: 0;
   margin-bottom: 1rem;
-  padding: 12px 18px; /* Restore original button size */
-  font-size: 16px; /* Restore original font size */
+  padding: 12px 18px;
+  font-size: 16px;
   font-weight: bold;
   background: #fff;
   color: #000;
   border: 2px solid #000;
-
   cursor: pointer;
   transition: 0.3s;
 }
@@ -206,7 +237,7 @@ button:disabled {
 }
 
 .timer-button {
-  font-size: 14px; /* Compact size for timer button */
+  font-size: 14px;
   padding: 8px 12px;
   font-weight: bold;
   background: #fff;
@@ -215,9 +246,23 @@ button:disabled {
   cursor: pointer;
 }
 
-.timer {
-  font-size: 18px;
+.remaining-vocab {
+  font-size: 16px;
   font-weight: bold;
+}
+.divider {
+  display: inline-block;
+  width: 2px;
+  height: 10px;
+  background-color: black;
+  margin: 0 12px;
+  vertical-align: baseline; /* Align with the text baseline */
+}
+.time-left-display {
+  font-size: 36px;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .drill-card {
