@@ -1,6 +1,7 @@
 <template>
   <div class="drill-container">
     <h1>Vocabulary Drill</h1>
+    <span class="instructions">Read the card within your selected time</span>
 
     <nav class="topik-selector-container">
       <button
@@ -23,7 +24,16 @@
       <button @click="resetDrill">Reset</button>
     </div>
 
-    <p class="timer">Time left: {{ countdown }}s</p>
+    <div class="timer-container">
+      <button
+        @click="toggleInterval"
+        :disabled="isPlaying"
+        class="timer-button"
+      >
+        {{ drillInterval === 2 ? '1s' : '2s' }}
+      </button>
+      <p class="timer">Time left: {{ countdown }}s</p>
+    </div>
 
     <div class="drill-card" v-if="currentItem">
       <h2>
@@ -47,6 +57,7 @@ export default {
     const currentIndex = ref(0);
     const isPlaying = ref(false);
     const countdown = ref(2); // Timer starts at 2 seconds
+    const drillInterval = ref(2); // Default interval is 2 seconds
     let intervalId = null;
     let countdownId = null;
 
@@ -67,15 +78,15 @@ export default {
       intervalId = setInterval(() => {
         if (currentIndex.value < levelData.value.length - 1) {
           currentIndex.value++;
-          countdown.value = 2; // Reset countdown for next card
+          countdown.value = drillInterval.value; // Reset countdown for next card
         } else {
           pauseDrill(); // Stop when reaching the end
         }
-      }, 2000);
+      }, drillInterval.value * 1000);
     }
 
     function startCountdown() {
-      countdown.value = 2; // Reset countdown
+      countdown.value = drillInterval.value; // Reset countdown
       countdownId = setInterval(() => {
         if (countdown.value > 0) {
           countdown.value--;
@@ -92,7 +103,12 @@ export default {
     function resetDrill() {
       pauseDrill();
       currentIndex.value = 0;
-      countdown.value = 2; // Reset countdown
+      countdown.value = drillInterval.value; // Reset countdown
+    }
+
+    function toggleInterval() {
+      drillInterval.value = drillInterval.value === 2 ? 1 : 2;
+      countdown.value = drillInterval.value; // Update countdown when toggled
     }
 
     const currentItem = computed(() => levelData.value[currentIndex.value]);
@@ -103,9 +119,11 @@ export default {
       startDrill,
       pauseDrill,
       resetDrill,
+      toggleInterval,
       currentItem,
       isPlaying,
       countdown,
+      drillInterval,
     };
   },
 };
@@ -131,25 +149,38 @@ h1 {
   margin-bottom: 20px;
 }
 
-.topik-selector-container {
-  margin-bottom: 20px;
-  display: flex;
-  gap: 10px;
-}
-
-.controls {
-  margin-bottom: 15px;
-}
-
-button {
-  margin: 5px;
-  padding: 12px 18px;
+.instructions {
   font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.topik-selector-container,
+.controls button {
+  width: 91px;
+}
+
+.topik-selector-container,
+.controls,
+.timer-container {
+  width: 80%; /* Ensures alignment with the heading */
+  max-width: 500px;
+  display: flex;
+  gap: 15px; /* Restore button spacing */
+  justify-content: flex-start; /* Align buttons to the start of the container */
+}
+
+.topik-selector-container button,
+.controls button {
+  margin: 0;
+  margin-bottom: 1rem;
+  padding: 12px 18px; /* Restore original button size */
+  font-size: 16px; /* Restore original font size */
   font-weight: bold;
   background: #fff;
   color: #000;
   border: 2px solid #000;
-  border-radius: 5px;
+
   cursor: pointer;
   transition: 0.3s;
 }
@@ -159,16 +190,34 @@ button:hover {
   color: #fff;
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .active {
   font-weight: bold;
   color: white;
   background-color: #007bff;
 }
 
+.timer-container {
+  align-items: center;
+}
+
+.timer-button {
+  font-size: 14px; /* Compact size for timer button */
+  padding: 8px 12px;
+  font-weight: bold;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  cursor: pointer;
+}
+
 .timer {
   font-size: 18px;
   font-weight: bold;
-  margin: 10px 0;
 }
 
 .drill-card {
