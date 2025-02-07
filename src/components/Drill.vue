@@ -205,6 +205,7 @@ h1 {
 .topik-selector-container button,
 .controls button {
   margin: 0;
+  width: 97px;
   margin-bottom: 1rem;
   padding: 12px 18px;
   font-size: 16px;
@@ -224,6 +225,7 @@ button:hover {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  width: 97px;
 }
 
 .active {
