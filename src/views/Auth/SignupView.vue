@@ -34,54 +34,111 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script>
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import useSignup from '@/composables/useSignup';
+import leoProfanity from 'leo-profanity'; // ✅ New profanity filter
 
-// Form Fields
-const email = ref('');
-const username = ref('');
-const password = ref('');
-const selectedProfile = ref('');
+export default {
+  setup() {
+    const email = ref('');
+    const username = ref('');
+    const password = ref('');
+    const selectedProfile = ref('');
+    const error = ref(null);
 
-const profilePictures = ref([
-  '/userThumbnails/bear.svg',
-  '/userThumbnails/cat.svg',
-  '/userThumbnails/chicken.svg',
-  '/userThumbnails/dog.svg',
-  '/userThumbnails/koala.svg',
-  '/userThumbnails/lion.svg',
-  '/userThumbnails/meerkat.svg',
-  '/userThumbnails/sea-lion.svg',
-]);
+    const profilePictures = ref([
+      '/userThumbnails/bear.svg',
+      '/userThumbnails/cat.svg',
+      '/userThumbnails/chicken.svg',
+      '/userThumbnails/dog.svg',
+      '/userThumbnails/koala.svg',
+      '/userThumbnails/lion.svg',
+      '/userThumbnails/meerkat.svg',
+      '/userThumbnails/sea-lion.svg',
+    ]);
 
-// Signup Functionality
+    const bannedUsernames = ['admin', 'root', 'moderator', 'test', 'support'];
+    const router = useRouter();
+    const { error: signupError, signup, isPending } = useSignup();
 
-const { error, signup, isPending } = useSignup();
+    // **Load Profanity List**
+    onMounted(() => {
+      leoProfanity.loadDictionary(); // ✅ Load default profanity dictionary
+    });
 
-const router = useRouter();
+    // **Email Validation**
+    const validateEmail = (email) => {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        error.value = 'Invalid email format.';
+        return false;
+      }
+      if (email.length > 254 || email.length < 5) {
+        error.value = 'Email must be between 5 and 254 characters.';
+        return false;
+      }
+      return true;
+    };
 
-const submitForm = async () => {
-  error.value = null; // Reset error before attempting signup
+    // **Username Validation**
+    const validateUsername = (name) => {
+      const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+      if (!usernameRegex.test(name)) {
+        error.value =
+          'Username can only contain letters, numbers, and underscores (3-20 characters).';
+        return false;
+      }
+      if (bannedUsernames.includes(name.toLowerCase())) {
+        error.value = 'This username is not allowed.';
+        return false;
+      }
+      if (leoProfanity.check(name)) {
+        error.value = 'This username contains inappropriate words.';
+        return false;
+      }
+      return true;
+    };
 
-  if (!selectedProfile.value) {
-    error.value = 'Please select a profile picture.';
-    return;
-  }
+    // **Form Submission**
+    const submitForm = async () => {
+      error.value = null;
 
-  try {
-    await signup(
-      email.value,
-      password.value,
-      username.value,
-      selectedProfile.value
-    );
-    router.push('/'); // Redirect on successful signup
-  } catch (err) {
-    console.error('Signup error:', err);
-    error.value = err.message; // Store the error to display in UI
-  }
+      if (!validateEmail(email.value) || !validateUsername(username.value)) {
+        return;
+      }
+
+      if (!selectedProfile.value) {
+        error.value = 'Please select a profile picture.';
+        return;
+      }
+
+      try {
+        await signup(
+          email.value,
+          password.value,
+          username.value,
+          selectedProfile.value
+        );
+        router.push('/');
+      } catch (err) {
+        console.error('Signup error:', err);
+        error.value = err.message;
+      }
+    };
+
+    return {
+      email,
+      username,
+      password,
+      selectedProfile,
+      error,
+      profilePictures,
+      isPending,
+      submitForm,
+    };
+  },
 };
 </script>
 
