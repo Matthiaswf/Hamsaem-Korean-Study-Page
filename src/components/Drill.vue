@@ -16,6 +16,9 @@
       >
         Topik II
       </button>
+      <button @click="toggleRandomOrder" :class="{ active: isRandomOrder }">
+        {{ isRandomOrder ? 'Random' : 'In Order' }}
+      </button>
     </nav>
 
     <div class="controls">
@@ -61,8 +64,9 @@ export default {
     const selectedLevel = ref(null);
     const currentIndex = ref(0);
     const isPlaying = ref(false);
-    const countdown = ref(2); // Timer starts at 2 seconds
-    const drillInterval = ref(2); // Default interval is 2 seconds
+    const isRandomOrder = ref(false); // State for random/sequential order
+    const countdown = ref(2);
+    const drillInterval = ref(2);
     let intervalId = null;
     let countdownId = null;
 
@@ -77,11 +81,12 @@ export default {
     }
 
     function startDrill() {
-      if (!levelData.value.length) return;
+      if (!shuffledLevelData.value.length) return;
+
       isPlaying.value = true;
       startCountdown();
       intervalId = setInterval(() => {
-        if (currentIndex.value < levelData.value.length - 1) {
+        if (currentIndex.value < shuffledLevelData.value.length - 1) {
           currentIndex.value++;
           countdown.value = drillInterval.value; // Reset countdown for next card
         } else {
@@ -100,27 +105,19 @@ export default {
       }, 10);
     }
 
-    // Remaining vocabulary count
-    const remainingVocabCount = computed(
-      () => levelData.value.length - currentIndex.value
-    );
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
 
-    // Formatted countdown timer (e.g., 2.00 format)
-    const formattedCountdown = computed(() => countdown.value.toFixed(1));
-
-    // Total remaining time for all vocabulary
-    const totalRemainingTime = computed(
-      () => remainingVocabCount.value * drillInterval.value
-    );
-
-    const formattedTotalTimeLeft = computed(() => {
-      const totalSeconds = totalRemainingTime.value;
-      const hours = Math.floor(totalSeconds / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = Math.floor(totalSeconds % 60);
-
-      return `${hours}h ${minutes}min ${seconds}s`;
-    });
+    function toggleRandomOrder() {
+      isRandomOrder.value = !isRandomOrder.value; // Toggle between random and in order
+      resetDrill(); // Reset the drill whenever the order changes
+    }
 
     function pauseDrill() {
       clearInterval(intervalId);
@@ -139,7 +136,34 @@ export default {
       countdown.value = drillInterval.value; // Update countdown when toggled
     }
 
-    const currentItem = computed(() => levelData.value[currentIndex.value]);
+    const shuffledLevelData = computed(() => {
+      return isRandomOrder.value
+        ? shuffleArray(levelData.value)
+        : levelData.value;
+    });
+
+    const currentItem = computed(
+      () => shuffledLevelData.value[currentIndex.value]
+    );
+
+    const remainingVocabCount = computed(
+      () => shuffledLevelData.value.length - currentIndex.value
+    );
+
+    const totalRemainingTime = computed(
+      () => remainingVocabCount.value * drillInterval.value
+    );
+
+    const formattedCountdown = computed(() => countdown.value.toFixed(1));
+
+    const formattedTotalTimeLeft = computed(() => {
+      const totalSeconds = totalRemainingTime.value;
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = Math.floor(totalSeconds % 60);
+
+      return `${hours}h ${minutes}min ${seconds}s`;
+    });
 
     return {
       selectedLevel,
@@ -148,10 +172,13 @@ export default {
       pauseDrill,
       resetDrill,
       toggleInterval,
+      toggleRandomOrder,
       currentItem,
       isPlaying,
+      isRandomOrder,
       countdown,
       drillInterval,
+      shuffledLevelData,
       remainingVocabCount,
       totalRemainingTime,
       formattedCountdown,
@@ -205,7 +232,7 @@ h1 {
 .topik-selector-container button,
 .controls button {
   margin: 0;
-  width: 97px;
+  width: 120px;
   margin-bottom: 1rem;
   padding: 12px 18px;
   font-size: 16px;
@@ -225,13 +252,13 @@ button:hover {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  width: 97px;
+  width: 120px;
 }
 
-.active {
+button.active {
   font-weight: bold;
   color: white;
-  background-color: #007bff;
+  background-color: black;
 }
 
 .timer-container {
@@ -252,14 +279,16 @@ button:disabled {
   font-size: 16px;
   font-weight: bold;
 }
+
 .divider {
   display: inline-block;
   width: 2px;
   height: 10px;
   background-color: black;
   margin: 0 12px;
-  vertical-align: baseline; /* Align with the text baseline */
+  vertical-align: baseline;
 }
+
 .time-left-display {
   font-size: 36px;
   font-weight: bold;
