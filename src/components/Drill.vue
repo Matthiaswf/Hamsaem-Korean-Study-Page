@@ -21,6 +21,8 @@
       <button @click="resetDrill">Reset</button>
     </div>
 
+    <p class="timer">Time left: {{ countdown }}s</p>
+
     <div class="drill">
       <p v-if="currentItem">
         <strong>English:</strong> {{ currentItem.english }} <br />
@@ -43,7 +45,9 @@ export default {
     const selectedLevel = ref(null);
     const currentIndex = ref(0);
     const isPlaying = ref(false);
+    const countdown = ref(2); // Timer starts at 2 seconds
     let intervalId = null;
+    let countdownId = null;
 
     function setLevel(level) {
       selectedLevel.value = level;
@@ -58,23 +62,36 @@ export default {
     function startDrill() {
       if (!levelData.value.length) return;
       isPlaying.value = true;
+      startCountdown();
       intervalId = setInterval(() => {
         if (currentIndex.value < levelData.value.length - 1) {
           currentIndex.value++;
+          countdown.value = 2; // Reset countdown for next card
         } else {
           pauseDrill(); // Stop when reaching the end
         }
       }, 2000);
     }
 
+    function startCountdown() {
+      countdown.value = 2; // Reset countdown
+      countdownId = setInterval(() => {
+        if (countdown.value > 0) {
+          countdown.value--;
+        }
+      }, 1000);
+    }
+
     function pauseDrill() {
       clearInterval(intervalId);
+      clearInterval(countdownId);
       isPlaying.value = false;
     }
 
     function resetDrill() {
       pauseDrill();
       currentIndex.value = 0;
+      countdown.value = 2; // Reset countdown
     }
 
     const currentItem = computed(() => levelData.value[currentIndex.value]);
@@ -87,6 +104,7 @@ export default {
       resetDrill,
       currentItem,
       isPlaying,
+      countdown,
     };
   },
 };
@@ -116,6 +134,12 @@ button {
   font-weight: bold;
   color: white;
   background-color: #007bff;
+}
+
+.timer {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0;
 }
 
 .drill {
