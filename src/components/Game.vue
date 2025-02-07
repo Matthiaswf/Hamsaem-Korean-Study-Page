@@ -47,15 +47,9 @@ import { storeToRefs } from 'pinia';
 export default {
   setup() {
     const gameSate = ref(0);
-
     let gameLost = false;
-
     const gameStore = useGameStore();
-
-    // Turns them into Refs so we can use images
     const { images, selectedImages, round, loading } = storeToRefs(gameStore);
-
-    // Get the images
     gameStore.getImages();
 
     function startGame() {
@@ -69,14 +63,12 @@ export default {
         gameLost = true;
         gameStore.resetGame();
         gameStore.shuffleImages();
-        console.log('Game Over');
         gameSate.value = 2;
         return;
       } else {
         gameStore.selectImage(id);
         gameStore.incrementRound();
         if (round.value === 20) {
-          console.log('Win');
           gameSate.value = 3;
         }
         gameStore.shuffleImages();
@@ -96,30 +88,24 @@ export default {
 </script>
 
 <style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Centers content vertically */
-  background-color: white;
+  justify-content: flex-start;
+  background-color: #fff;
   min-height: 100vh;
   width: 100vw;
   padding-bottom: 10px;
-  overflow: hidden;
 }
 
-.game-rules {
+.game-rules,
+.game-result {
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 450px;
+  text-align: center;
 }
 
 .rules-list {
@@ -129,62 +115,81 @@ export default {
   font-size: 24px;
 }
 
-.game-result {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 450px;
-}
-
-li {
-  margin-bottom: 1rem;
-}
-
 h2 {
   margin-bottom: 1rem;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+h4 {
+  margin-bottom: 1em;
+  font-size: 22px;
+  font-weight: 500;
 }
 
 button {
-  padding: 1rem 2rem;
-  font-size: 24px;
-  background-color: #cc924b;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  min-width: 150px;
+  height: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
+  text-align: center;
+  box-shadow: 0 5px #444;
+  position: relative;
 }
 
 button:hover {
-  background-color: white;
-  color: black;
-  border: 1px solid black;
-  transform: scale(1.05);
+  background: #000;
+  color: #fff;
+}
+
+button:active {
+  top: 5px;
+  box-shadow: 0 2px #444;
+}
+
+ul {
+  text-align: left;
+}
+
+li {
+  margin-bottom: 0.5rem;
 }
 
 .game {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 1em;
   max-width: 1200px;
 }
 
-h4 {
-  margin-bottom: 1em;
-}
-
 .game-img {
   width: 200px;
   height: 200px;
-  border: 8px solid #ddc5b0;
-  border-radius: 20px;
+  border: 8px solid;
+  border-image: linear-gradient(
+      to bottom,
+      rgba(121, 64, 45, 1) 0%,
+      rgba(214, 190, 170, 1) 100%
+    )
+    1;
   cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .game-img img {
-  border-radius: 12px;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .result-img {

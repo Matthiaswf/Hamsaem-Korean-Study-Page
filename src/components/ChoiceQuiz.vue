@@ -170,6 +170,10 @@ h2 span {
   font-weight: bold;
 }
 
+.placeholder {
+  padding-top: 25px;
+}
+
 .quiz-choices {
   margin-top: 20px;
   display: flex;
