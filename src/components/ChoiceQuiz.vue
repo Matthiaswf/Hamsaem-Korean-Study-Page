@@ -3,7 +3,7 @@
     <h1>Vocabulary Quiz</h1>
     <div class="quiz-card">
       <h2 v-if="quizQuestion">
-        Translate: <span>{{ quizQuestion.korean }}</span>
+        <span>{{ quizQuestion.korean }}</span>
       </h2>
       <h2 class="placeholder" v-else>Select a Level</h2>
 
@@ -20,21 +20,18 @@
 
       <div v-else-if="quizState === 2" class="result">
         <div v-if="userSelectedItem !== quizQuestion.id" class="fail">
-          <img :src="randomFailImage" alt="Fail Image" class="fail-image" />
-          <p>
-            Incorrect!<br />
-            {{ quizQuestion.english }}
-          </p>
+          <img :src="randomFailImage" alt="Fail Image" class="feedback-image" />
+          <p class="fail-text">Incorrect!<br />{{ quizQuestion.english }}</p>
         </div>
         <div v-else class="success">
           <img
             :src="randomSucessImage"
             alt="Success Image"
-            class="success-image"
+            class="feedback-image"
           />
-          <p>Correct!</p>
+          <p class="success-text">Correct!</p>
         </div>
-        <button class="next-btn" @click="newRound">Next Question</button>
+        <button class="next-btn" @click="newRound">Next</button>
       </div>
     </div>
   </div>
@@ -46,7 +43,6 @@ import coolCat from '@/assets/icons/cats/cool.svg';
 import heartsCat from '@/assets/icons/cats/hearts.svg';
 import partyCat from '@/assets/icons/cats/party.svg';
 import smileCat from '@/assets/icons/cats/smile.svg';
-
 import angryCat from '@/assets/icons/cats/angry.svg';
 import tearsCat from '@/assets/icons/cats/tears.svg';
 import shockedCat from '@/assets/icons/cats/shocked.svg';
@@ -134,120 +130,93 @@ export default {
 </script>
 
 <style scoped>
-/* General Layout */
 .quiz-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   font-family: 'Arial', sans-serif;
-  background-color: white;
+  background-color: #fff;
   padding: 30px;
   min-height: 100vh;
   width: 100vw;
+  color: #000;
 }
 
-/* Quiz Card Styling */
 .quiz-card {
-  background: white;
+  background: #fff;
   padding: 25px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 80%;
   max-width: 500px;
   text-align: center;
-  border: 2px solid #333;
-  position: relative;
+  border: 2px solid #000;
 }
 
-.placeholder {
-  padding-top: 25px;
-}
-
-/* Question Styling */
 h1 {
-  font-size: 24px;
+  font-size: 28px;
+  font-weight: bold;
+  text-transform: uppercase;
   margin-bottom: 20px;
-  color: #444;
 }
 
 h2 {
-  font-size: 20px;
-  color: #333;
+  font-size: 28px;
+  height: 50px;
+  font-weight: 500;
 }
 
 h2 span {
   font-weight: bold;
-  color: #0077cc;
 }
 
-/* Quiz Choices */
 .quiz-choices {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-/* Answer Buttons */
 .quiz-option {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   font-size: 18px;
   font-weight: bold;
-  background: white;
-  color: #333;
-  border: 2px solid #0077cc;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s;
-  text-align: center;
 }
 
 .quiz-option:hover {
-  background: #0077cc;
-  color: white;
+  background: #000;
+  color: #fff;
 }
 
-/* Correct / Incorrect Message */
-.result h2 {
-  margin: 15px 0;
-}
-
-.success,
-.fail {
-  display: flex;
-  flex-direction: column; /* Ensure image and text stack vertically */
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  text-align: center; /* Center-align the text */
-  gap: 15px; /* Add space between the image and text */
-}
-
-.success-image,
-.fail-image {
-  width: 100px; /* Increase the size of the image */
+.feedback-image {
+  width: 100px;
   height: 100px;
-  margin: 10px 0;
-  object-fit: contain; /* Prevent image clipping */
+  margin: 15px 0;
+  object-fit: contain;
 }
 
-.fail p {
-  margin: 0;
-  color: #dc3545; /* Red color for incorrect text */
+.fail-text {
+  color: red;
   font-size: 20px;
   font-weight: bold;
-  line-height: 1.5;
 }
 
-.success {
-  color: #28a745; /* Green color for correct text */
+.success-text {
+  color: green;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .next-btn {
   margin-top: 20px;
-  background: #0077cc;
+  background: #000;
   color: white;
   padding: 12px 20px;
   font-size: 18px;
@@ -258,15 +227,6 @@ h2 span {
 }
 
 .next-btn:hover {
-  background: #005fa3;
-}
-
-/* Mobile Styling */
-@media (max-width: 768px) {
-  .quiz-container {
-    min-height: 0;
-    height: fit-content;
-    padding-bottom: 0px;
-  }
+  background: #333;
 }
 </style>

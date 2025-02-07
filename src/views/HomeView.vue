@@ -96,7 +96,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Center the content */
+  justify-content: flex-start;
   height: fit-content;
   width: 100%;
 }
@@ -106,43 +106,38 @@ export default {
   height: 50px;
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
 button {
   min-width: 130px;
   height: 40px;
-  color: #fff;
-  padding: 5px 10px;
+  font-size: 18px;
   font-weight: bold;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
+  text-align: center;
+  box-shadow: 0 5px #444;
   position: relative;
-  display: inline-block;
-  outline: none;
-  border-radius: 5px;
-  border: none;
-  background: #cc924b;
-  box-shadow: 0 5px #d6ae7c;
 }
 
 button:hover {
-  box-shadow: 0 3px #495057;
-  top: 1px;
+  background: #000;
+  color: #fff;
 }
 
 button:active {
-  box-shadow: 0 0 #495057;
   top: 5px;
+  box-shadow: 0 2px #444;
 }
 
-/* Flip colors for active button */
 button.active {
-  background: #fff;
-  color: #495057;
-  border: 2px solid #495057;
-  box-shadow: 0 5px #495057;
+  background: #000;
+  color: #fff;
 }
 
 /* Mobile Styling */
