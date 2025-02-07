@@ -105,4 +105,34 @@ button:disabled {
   background: gray;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .login-container {
+    width: 90%; /* Adjusted width for smaller screens */
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    border: none;
+  }
+
+  .title {
+    font-size: 20px; /* Adjusted font size */
+  }
+
+  input {
+    margin-top: 5px; /* Adjusted margin */
+  }
+
+  label {
+    margin-top: 5px; /* Adjusted margin */
+  }
+
+  button {
+    margin-top: 20px; /* Adjusted margin */
+  }
+
+  .error-message {
+    margin-top: 5px; /* Adjusted margin */
+  }
+}
 </style>
