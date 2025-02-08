@@ -6,7 +6,7 @@
       <input type="email" v-model="email" required />
 
       <label>Username</label>
-      <input type="text" v-model="username" required />
+      <input type="text" v-model="displayName" required />
 
       <label>Password</label>
       <input type="password" v-model="password" required />
@@ -25,6 +25,9 @@
       </div>
 
       <button v-if="!isPending" type="submit">Sign Up</button>
+      <p v-if="verificationMessage" class="verification-message">
+        {{ verificationMessage }}
+      </p>
       <div v-if="error" class="error-message">{{ error }}</div>
 
       <button v-if="isPending" type="submit" :disabled="isPending">
@@ -43,10 +46,11 @@ import leoProfanity from 'leo-profanity';
 export default {
   setup() {
     const email = ref('');
-    const username = ref('');
+    const displayName = ref('');
     const password = ref('');
     const selectedProfile = ref('');
     const error = ref(null);
+    const verificationMessage = ref('');
 
     const profilePictures = ref([
       '/userThumbnails/bear.svg',
@@ -104,24 +108,20 @@ export default {
     // **Form Submission**
     const submitForm = async () => {
       error.value = null;
-
-      if (!validateEmail(email.value) || !validateUsername(username.value)) {
-        return;
-      }
-
-      if (!selectedProfile.value) {
-        error.value = 'Please select a profile picture.';
-        return;
-      }
+      verificationMessage.value = ''; // Reset message before signing up
 
       try {
-        await signup(
+        const { message } = await signup(
           email.value,
           password.value,
-          username.value,
+          displayName.value,
           selectedProfile.value
         );
-        router.push('/');
+
+        verificationMessage.value = message; // Display message to the user
+
+        // Optionally, redirect to login after a few seconds
+        setTimeout(() => router.push('/login'), 5000);
       } catch (err) {
         console.error('Signup error:', err);
         error.value = err.message;
@@ -130,13 +130,14 @@ export default {
 
     return {
       email,
-      username,
       password,
+      displayName,
       selectedProfile,
+      verificationMessage,
       error,
-      profilePictures,
       isPending,
       submitForm,
+      profilePictures,
     };
   },
 };
@@ -223,6 +224,12 @@ button {
 
 button:hover {
   background: gray;
+}
+
+.verification-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 .error-message {

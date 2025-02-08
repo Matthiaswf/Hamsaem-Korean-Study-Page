@@ -13,34 +13,68 @@
         {{ isPending ? 'Loading...' : 'Login' }}
       </button>
 
+      <!-- Resend Verification Button (only shown if login fails due to email verification) -->
+      <button @click="handleResendVerification" v-if="emailNotVerified">
+        Resend Verification Email
+      </button>
+
+      <p v-if="resendMessage">{{ resendMessage }}</p>
+
       <div v-if="error" class="error-message">{{ error }}</div>
     </form>
   </div>
 </template>
 
-<script setup>
+<script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useLogin from '@/composables/useLogin'; // Custom login composable
 
-// Form Fields
-const email = ref('');
-const password = ref('');
+export default {
+  setup() {
+    // Form Fields
+    const email = ref('');
+    const password = ref('');
 
-// Login Functionality
-const { error, login, isPending } = useLogin();
-const router = useRouter();
+    // Login Functionality
+    const {
+      error,
+      login,
+      resendVerificationEmail,
+      isPending,
+      emailNotVerified,
+    } = useLogin();
+    const router = useRouter();
+    const resendMessage = ref('');
 
-const submitForm = async () => {
-  error.value = null; // Reset error before attempting login
+    const submitForm = async () => {
+      error.value = null; // Reset error before attempting login
 
-  try {
-    await login(email.value, password.value);
-    router.push('/'); // Redirect on successful login
-  } catch (err) {
-    console.error('Login error:', err);
-    error.value = err.message; // Store the error to display in UI
-  }
+      try {
+        const res = await login(email.value, password.value);
+        if (res) router.push('/'); // Redirect on successful login
+      } catch (err) {
+        console.error('Login error:', err);
+        error.value = err.message; // Store the error to display in UI
+      }
+    };
+
+    const handleResendVerification = async () => {
+      resendMessage.value = await resendVerificationEmail();
+    };
+
+    return {
+      email,
+      password,
+      error,
+      login,
+      isPending,
+      submitForm,
+      handleResendVerification,
+      resendMessage,
+      emailNotVerified, // <-- Added for conditionally showing the button
+    };
+  },
 };
 </script>
 

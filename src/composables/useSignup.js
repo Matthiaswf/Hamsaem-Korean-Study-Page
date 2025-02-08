@@ -18,7 +18,10 @@ const signup = async (email, password, displayName, selectedProfile) => {
     );
     if (!res) throw new Error('Could not complete signup');
 
-    // Update user profile with displayName and photoURL
+    // Send verification email
+    await res.user.sendEmailVerification();
+
+    // Update user profile
     await res.user.updateProfile({ displayName, photoURL: selectedProfile });
 
     await addDoc({
@@ -26,16 +29,19 @@ const signup = async (email, password, displayName, selectedProfile) => {
       userId: res.user.uid,
       isOnline: true,
       isAdmin: false,
-      userThumbnail: selectedProfile, // Ensure correct profile picture is stored
+      userThumbnail: selectedProfile,
       createdAt: timestamp(),
     });
 
     isPending.value = false;
-    return res;
+    return {
+      res,
+      message: 'A verification email has been sent. Please check your inbox.',
+    }; // Return message
   } catch (err) {
     isPending.value = false;
-    error.value = err.message; // Capture error for UI
-    throw err; // Rethrow so `submitForm` can handle it
+    error.value = err.message;
+    throw err;
   }
 };
 
