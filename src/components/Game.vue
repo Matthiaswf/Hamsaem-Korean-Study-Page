@@ -94,7 +94,7 @@ export default {
   align-items: center;
   justify-content: flex-start;
   background-color: #fff;
-  min-height: 100vh;
+  height: 100%;
   width: 100vw;
   padding-bottom: 10px;
 }

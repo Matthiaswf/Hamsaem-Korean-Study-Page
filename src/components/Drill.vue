@@ -196,7 +196,7 @@ export default {
   font-family: 'Arial', sans-serif;
   background-color: #fff;
   padding: 30px;
-  min-height: 100vh;
+  height: 100%;
   width: 100vw;
   color: #000;
 }

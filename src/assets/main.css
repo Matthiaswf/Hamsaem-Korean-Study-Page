@@ -9,7 +9,7 @@
   font-family: 'Noto Sans Pau Cin Hau';
   font-weight: 400;
   max-width: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 body {
   background: var(--background);
